@@ -477,8 +477,10 @@
           <p class="card-desc">
             OPPO / 华为等国产手机<b>系统自带 TTS 没有韩语</b>，且国内连不上 Google 服务器、无法下载韩语语音。
             开启后由<b>讯飞云端</b>合成韩语，国内直连、无需翻墙，覆盖系统 TTS。
-            需先在 <a href="https://console.xfyun.cn/services/tts" target="_blank" rel="noopener">讯飞开放平台</a>
-            免费创建应用，并在「发音人管理」里<b>开启韩语发音人（否则报 11200）</b>。
+            步骤：① 控制台左侧菜单点 <b>语音合成 → 在线语音合成</b>（<b>不是「超拟人语音合成」</b>，韩语发音人不在那里）；
+            ② 完成实名认证（未实名会被限流）；③ 在该服务页的「发音人管理」里
+            <b>领取 miya（韩语女声）或 智敏（韩语女声）</b>，领取后控制台会显示 <b>vcn 参数值</b>，复制填到下面；
+            ④ 用<b>「在线语音合成」服务页</b>显示的 APPID / APIKey / APISecret（每个服务的密钥不同，别用超拟人那组）。
           </p>
           <div class="switch-row" style="margin-bottom:12px">
             <label class="switch"><input type="checkbox" id="tglCloud"><span></span>启用云端发音（覆盖系统 TTS）</label>
@@ -487,11 +489,13 @@
           <div class="field"><label>APIKey</label><input class="answer-input" id="cloudApiKey" placeholder="讯飞控制台获取"></div>
           <div class="field"><label>APISecret</label><input class="answer-input" id="cloudApiSecret" placeholder="讯飞控制台获取"></div>
           <div class="field">
-            <label>发音人（韩语）</label>
-            <select class="sel full" id="cloudVcn">
-              <option value="x2_KoKr_Miya">Miya · 女声</option>
-              <option value="x2_KoKr_Kyung">Kyung · 男声</option>
-            </select>
+            <label>发音人 vcn（以控制台「发音人管理」显示的参数值为准）</label>
+            <input class="answer-input" id="cloudVcn" list="vcnList" placeholder="例如：miya">
+            <datalist id="vcnList">
+              <option value="miya">miya · 韩语女声（推荐）</option>
+              <option value="zhimin">zhimin · 智敏 · 韩语女声</option>
+              <option value="kim">kim · 韩语女声（旧版）</option>
+            </datalist>
           </div>
           <button class="btn small primary" id="btnCloudTest">🔊 测试云端发音</button>
           <div class="env-warn" id="cloudStatus"></div>
