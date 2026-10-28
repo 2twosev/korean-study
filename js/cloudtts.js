@@ -157,6 +157,36 @@
 
     stop: function () {
       if (this._audio) { try { this._audio.pause(); } catch (e) { } }
+    },
+
+    /* ---------- 连接诊断：仅握手，不合成，返回结果 ---------- */
+    diagnose: function (cb) {
+      cb = cb || function () {};
+      if (!this.isConfigured()) { cb({ ok: false, err: '未配置密钥' }); return; }
+      if (typeof crypto === 'undefined' || !crypto.subtle) { cb({ ok: false, err: '当前非 HTTPS 安全上下文' }); return; }
+      var self = this;
+      var date = new Date().toUTCString();
+      self._sign(date).then(function (signature) {
+        var authOrigin = 'api_key="' + self.cfg.apiKey +
+          '", algorithm="hmac-sha256", headers="host date request-line", signature="' + signature + '"';
+        var authorization = btoa(authOrigin);
+        var url = 'wss://tts-api.xfyun.cn/v2/tts?authorization=' +
+          encodeURIComponent(authorization) + '&date=' + encodeURIComponent(date) +
+          '&host=tts-api.xfyun.cn';
+        var ws;
+        try { ws = new WebSocket(url); }
+        catch (e) { cb({ ok: false, err: '无法创建 WebSocket：' + e.message }); return; }
+        var done = false;
+        var timer = setTimeout(function () {
+          if (!done) { done = true; try { ws.close(); } catch (e) {} cb({ ok: false, err: '握手超时（6秒无响应）' }); }
+        }, 6000);
+        ws.onopen = function () { done = true; clearTimeout(timer); try { ws.close(); } catch (e) {} cb({ ok: true, code: '握手成功' }); };
+        ws.onerror = function () { if (!done) { done = true; clearTimeout(timer); cb({ ok: false, err: '握手错误（连接被拒绝/拦截）' }); } };
+        ws.onclose = function (ev) {
+          if (done) return; done = true; clearTimeout(timer);
+          cb({ ok: false, code: ev && ev.code, err: '握手被关闭（关闭码 ' + (ev && ev.code) + '）' });
+        };
+      }).catch(function (e) { cb({ ok: false, err: '签名失败：' + e.message }); });
     }
   };
 
