@@ -184,7 +184,7 @@
     $app.value = c.appId || '';
     $key.value = c.apiKey || '';
     $sec.value = c.apiSecret || '';
-    $vcn.value = c.vcn || 'x2_KoKr_Miya';
+    $vcn.value = c.vcn || 'miya';
     $tgl.checked = !!c.enabled;
 
     function save() {
@@ -193,8 +193,7 @@
       KC.cloudtts.configure(c);
       S.save();
     }
-    [$app, $key, $sec].forEach(function (el) { el.oninput = save; });
-    $vcn.onchange = save;
+    [$app, $key, $sec, $vcn].forEach(function (el) { el.oninput = save; });
     $tgl.onchange = function () { save(); App.renderDiag(); };
 
     $('#btnCloudTest').onclick = function () {
