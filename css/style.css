@@ -668,6 +668,8 @@ input[type=range]::-moz-range-thumb{
    ========================================================= */
 @media (max-width: 768px) {
   .app{flex-direction:column}
+  /* 内容底部留足空间，避免被固定底部导航栏遮挡 */
+  .content{padding:16px 14px calc(90px + env(safe-area-inset-bottom,0px));max-width:100%}
 
   /* 侧边栏 → 底部标签栏 */
   .sidebar{
@@ -789,10 +791,11 @@ input[type=range]::-moz-range-thumb{
   .chat-state{display:none}
   .chat-head .btn{margin-left:auto;padding:4px 9px;font-size:11px}
 
-  /* 对话区：按屏幕高度自适应（用 dvh 规避移动端地址栏跳动） */
+  /* 对话区：按屏幕高度自适应（用 dvh 规避移动端地址栏跳动）
+     留出 顶部栏+head+输入框+底部导航 的空间，避免输入框被导航栏遮挡 */
   .chat-body{
     height:auto;min-height:160px;
-    max-height:calc(100dvh - 220px);
+    max-height:calc(100dvh - 320px);
     padding:10px;gap:7px;
   }
   .msg{max-width:92%;gap:2px}
