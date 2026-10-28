@@ -86,6 +86,7 @@
     var el = document.createElement('div');
     el.className = 'msg ' + (m.role === 'me' ? 'me' : 'ai');
     var inner = '';
+    var collapsed = false;
     if (m.sys) {
       el.className = 'sys-msg';
       el.textContent = m.text;
@@ -95,20 +96,24 @@
     }
     if (m.role === 'ai') {
       inner += '<div class="ko-line">' + U.escape(m.ko) + '</div>';
-      if (m.showRom && m.rom) inner += '<div class="rom-line">' + U.escape(m.rom) + '</div>';
-      if (m.showZh && m.zh) inner += '<div class="zh-line">' + U.escape(m.zh) + '</div>';
+      if (m.rom) inner += '<div class="rom-line">' + U.escape(m.rom) + '</div>';
+      if (m.zh) inner += '<div class="zh-line">' + U.escape(m.zh) + '</div>';
+      // 手机端默认折叠 AI 气泡（只显示韩语），挑战模式桌面端也折叠
+      var isMobile = window.matchMedia && window.matchMedia('(max-width:768px)').matches;
+      if (m.hidden || isMobile) collapsed = true;
     } else {
       inner += '<div class="ko-line">' + U.escape(m.ko) + '</div>';
       if (m.zh) inner += '<div class="zh-line">' + U.escape(m.zh) + '</div>';
     }
-    el.innerHTML = '<div class="bubble">' + inner + '</div>' +
+    el.innerHTML = '<div class="bubble' + (collapsed ? ' collapsed' : '') + '">' + inner + '</div>' +
       '<div class="msg-time">' + nowTime() + '</div>' +
       (m.role === 'ai' ? '<div class="msg-actions">' +
         '<button class="msg-act" data-a="say">🔊 朗读</button>' +
         '<button class="msg-act" data-a="slow">🐢 慢速</button>' +
-        (m.hidden ? '<button class="msg-act" data-a="open">👀 看翻译</button>' : '') +
+        '<button class="msg-act open-act" data-a="open">👀 看翻译</button>' +
         '<button class="msg-act" data-a="copy">📋 复制</button>' +
         '</div>' : '');
+    if (collapsed) el.classList.add('msg-collapsed');
     el._m = m;
     body.appendChild(el);
     body.scrollTop = body.scrollHeight;
@@ -119,12 +124,10 @@
         if (a === 'say') Speech.speak(mm.ko);
         else if (a === 'slow') Speech.speak(mm.ko, { slow: true });
         else if (a === 'open') {
-          mm.showZh = true; mm.showRom = true; mm.hidden = false;
+          mm.hidden = false;
           var box = el.querySelector('.bubble');
-          var html = '<div class="ko-line">' + U.escape(mm.ko) + '</div>';
-          if (mm.rom) html += '<div class="rom-line">' + U.escape(mm.rom) + '</div>';
-          if (mm.zh) html += '<div class="zh-line">' + U.escape(mm.zh) + '</div>';
-          box.innerHTML = html;
+          box.classList.remove('collapsed');
+          el.classList.remove('msg-collapsed');
           b.remove();
         } else if (a === 'copy') {
           try {
