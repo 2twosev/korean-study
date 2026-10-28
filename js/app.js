@@ -144,8 +144,17 @@
     var msgs = [];
     if (!Speech.synth) msgs.push('当前浏览器不支持语音合成（Speech Synthesis），请改用 Edge 或 Chrome。');
     else if (!Speech.koVoices().length) {
-      msgs.push('未检测到韩语发音包，将使用其它语言语音朗读，发音可能不准。');
-      msgs.push('Windows 修复：设置 → 时间和语言 → 语音 → 添加「한국어(Korean)」语音。');
+      var ua2 = navigator.userAgent || '';
+      var oppo2 = /OPPO|ColorOS|PKD|CPH/i.test(ua2);
+      var and2 = /Android/i.test(ua2);
+      if (oppo2) {
+        msgs.push('OPPO/ColorOS 未检测到韩语语音：到「设置 → 其他设置 → 文字转语音(TTS)输出」，把首选引擎改为「Google 文字转语音引擎」，再点齿轮安装 한국어 语音数据，重开 Edge 刷新。');
+      } else if (and2) {
+        msgs.push('安卓未检测到韩语语音：到「设置 → 系统 → 语言和输入法 → 文字转语音(TTS)输出」安装 Korean/한국어 语音，并把首选引擎设为 Google，重开 Edge 刷新。');
+      } else {
+        msgs.push('未检测到韩语发音包，将使用其它语言语音朗读，发音可能不准。');
+        msgs.push('Windows 修复：设置 → 时间和语言 → 语音 → 添加「한국어(Korean)」语音。');
+      }
     }
     if (!Speech.supportSTT) msgs.push('当前浏览器不支持网页语音识别，麦克风跟读打分不可用。');
     if (msgs.length) {
