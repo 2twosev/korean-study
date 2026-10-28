@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한글 스터디 · 韩语全能学习助手</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ 侧边栏 ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">한</div>
+      <div class="brand-text">
+        <div class="brand-title">한글 스터디</div>
+        <div class="brand-sub">韩语全能学习助手</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <a class="nav-item active" data-page="home">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+        </span>
+        <span>学习主页</span>
+      </a>
+      <a class="nav-item" data-page="listen">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-9 9v6a2 2 0 0 0 2 2h2a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H5a7 7 0 0 1 14 0h-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2a2 2 0 0 0 2-2v-6a9 9 0 0 0-9-9z"/></svg>
+        </span>
+        <span>听力 듣기</span>
+      </a>
+      <a class="nav-item" data-page="speak">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4zm7-4a7 7 0 0 1-6 6.92V21h3v2H8v-2h3v-3.08A7 7 0 0 1 5 11h2a5 5 0 0 0 10 0z"/></svg>
+        </span>
+        <span>口语 말하기</span>
+      </a>
+      <a class="nav-item" data-page="read">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M3 4h7a3 3 0 0 1 2 .8A3 3 0 0 1 14 4h7v16h-7a2 2 0 0 0-2 1 2 2 0 0 0-2-1H3zm2 2v11h5v2h1V6zm12 0v11h5V6z"/></svg>
+        </span>
+        <span>阅读 읽기</span>
+      </a>
+      <a class="nav-item" data-page="write">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75zM20.7 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/></svg>
+        </span>
+        <span>写作 쓰기</span>
+      </a>
+      <a class="nav-item" data-page="music">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3zm-2 16a2 2 0 1 1-2-2 2 2 0 0 1 2 2z"/></svg>
+        </span>
+        <span>音乐 노래</span>
+      </a>
+      <a class="nav-item" data-page="chat">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M12 3c5 0 9 3.36 9 7.5S17 18 12 18a10 10 0 0 1-2.6-.34L5 21l.9-3.6A7.9 7.9 0 0 1 3 10.5C3 6.36 7 3 12 3z"/></svg>
+        </span>
+        <span>爱豆聊天</span>
+      </a>
+      <a class="nav-item" data-page="settings">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7zm8.4-2.6.1-.9-.1-.9 1.9-1.5-1.8-3.1-2.3.8a7.6 7.6 0 0 0-1.5-.9L16.3 4h-3.6l-.4 2.4c-.5.2-1 .5-1.5.9l-2.3-.8L4.7 9.6 6.6 11l-.1.9.1.9-1.9 1.5 1.8 3.1 2.3-.8c.5.4 1 .7 1.5.9l.4 2.4h3.6l.4-2.4c.5-.2 1-.5 1.5-.9l2.3.8 1.8-3.1z"/></svg>
+        </span>
+        <span>音色设置</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="streak-card">
+        <div class="streak-num" id="sidebarStreak">0</div>
+        <div class="streak-label">连续学习天数</div>
+      </div>
+      <div class="hint-box" id="engineHint">提示：推荐使用 Edge / Chrome 浏览器以获得最佳韩语发音效果</div>
+    </div>
+  </aside>
+
+  <!-- ============ 主区域 ============ -->
+  <main class="main">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">学习主页</h1>
+        <p id="pageSub">오늘도 한국어 공부해요! 今天也要学韩语哦</p>
+      </div>
+      <div class="topbar-right">
+        <div class="top-chip" id="chipVoice" title="当前发音人">
+          <span class="dot"></span><span id="chipVoiceName">默认音色</span>
+        </div>
+        <div class="top-chip" id="chipIdol" title="当前爱豆角色">
+          <span class="dot pink"></span><span id="chipIdolName">서연 (Seo-yeon)</span>
+        </div>
+        <button class="icon-btn" id="btnQuickVoice" title="试听当前音色">🔊</button>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+
+      <!-- ---------- 首页 ---------- -->
+      <section class="page active" id="page-home">
+        <div class="hero">
+          <div class="hero-text">
+            <div class="hero-badge">K-POP 沉浸式韩语学习</div>
+            <h2>听 · 说 · 读 · 写 <span>全覆盖</span></h2>
+            <p>可调音色的韩语发音引擎、QQ 音乐歌词精学、爱豆陪聊实时纠错。打开就用，无需联网。</p>
+            <div class="hero-actions">
+              <button class="btn primary" data-goto="listen">开始听力训练</button>
+              <button class="btn ghost" data-goto="chat">和爱豆聊天</button>
+            </div>
+          </div>
+          <div class="hero-art" id="heroArt"></div>
+        </div>
+
+        <div class="stat-row" id="statRow">
+          <div class="stat"><div class="stat-val" id="statWords">0</div><div class="stat-lab">掌握句子</div></div>
+          <div class="stat"><div class="stat-val" id="statMin">0</div><div class="stat-lab">学习分钟</div></div>
+          <div class="stat"><div class="stat-val" id="statSpeak">0</div><div class="stat-lab">口语练习</div></div>
+          <div class="stat"><div class="stat-val" id="statVocab">0</div><div class="stat-lab">生词本</div></div>
+        </div>
+
+        <h3 class="sec-title">四大能力训练</h3>
+        <div class="grid-4">
+          <div class="card skill" data-goto="listen">
+            <div class="skill-ico g-purple">🎧</div>
+            <div class="skill-name">听力 듣기</div>
+            <p>听写测验、辨音练习、韩语数字听辨</p>
+            <div class="skill-bar"><i style="width:0%" data-skill="listen"></i></div>
+          </div>
+          <div class="card skill" data-goto="speak">
+            <div class="skill-ico g-pink">🎤</div>
+            <div class="skill-name">口语 말하기</div>
+            <p>麦克风跟读打分、发音矫正、自由对话</p>
+            <div class="skill-bar"><i style="width:0%" data-skill="speak"></i></div>
+          </div>
+          <div class="card skill" data-goto="read">
+            <div class="skill-ico g-blue">📖</div>
+            <div class="skill-name">阅读 읽기</div>
+            <p>韩文字母表、分级课文、罗马音对照</p>
+            <div class="skill-bar"><i style="width:0%" data-skill="read"></i></div>
+          </div>
+          <div class="card skill" data-goto="write">
+            <div class="skill-ico g-green">✍️</div>
+            <div class="skill-name">写作 쓰기</div>
+            <p>罗马音打字、拼写测验、助词填空</p>
+            <div class="skill-bar"><i style="width:0%" data-skill="write"></i></div>
+          </div>
+        </div>
+
+        <h3 class="sec-title">今日一句</h3>
+        <div class="card daily" id="dailyCard">
+          <div class="daily-ko" id="dailyKo">오늘도 화이팅!</div>
+          <div class="daily-rom" id="dailyRom">oneuldo hwaiting!</div>
+          <div class="daily-zh" id="dailyZh">今天也加油！</div>
+          <div class="daily-actions">
+            <button class="btn small primary" id="btnDailyPlay">🔊 朗读</button>
+            <button class="btn small" id="btnDailySlow">🐢 慢速</button>
+            <button class="btn small" id="btnDailyNext">🎲 换一句</button>
+            <button class="btn small ghost" id="btnDailySave">⭐ 收藏</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 听力 ---------- -->
+      <section class="page" id="page-listen">
+        <div class="toolbar">
+          <div class="seg" id="listenMode">
+            <button class="seg-btn active" data-mode="dictation">听写测验</button>
+            <button class="seg-btn" data-mode="choice">听音辨析</button>
+            <button class="seg-btn" data-mode="number">数字听辨</button>
+          </div>
+          <div class="tool-right">
+            <select id="listenLevel" class="sel">
+              <option value="all">全部课程</option>
+            </select>
+            <button class="btn small" id="btnListenReset">重新开始</button>
+          </div>
+        </div>
+
+        <div class="card quiz-card">
+          <div class="quiz-head">
+            <span class="quiz-idx" id="listenIdx">1 / 10</span>
+            <span class="quiz-tag" id="listenTag">听写</span>
+          </div>
+
+          <div class="player" id="listenPlayer">
+            <button class="play-btn" id="btnListenPlay">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div class="player-info">
+              <div class="player-title">点击播放韩语发音</div>
+              <div class="player-sub" id="listenSub">可调快慢速，无限次重听</div>
+            </div>
+            <div class="player-tools">
+              <button class="mini-btn" id="btnListenSlow">0.6x</button>
+              <button class="mini-btn" id="btnListenHint">提示</button>
+            </div>
+          </div>
+
+          <div class="hint-area" id="listenHintArea"></div>
+
+          <input class="answer-input ko" id="listenInput" placeholder="在这里输入你听到的韩语…" autocomplete="off">
+          <div class="options" id="listenOptions"></div>
+
+          <div class="feedback" id="listenFeedback"></div>
+
+          <div class="quiz-foot">
+            <button class="btn ghost small" id="btnListenGiveUp">看答案</button>
+            <button class="btn primary" id="btnListenCheck">检查</button>
+            <button class="btn primary" id="btnListenNext" style="display:none">下一题 →</button>
+          </div>
+        </div>
+
+        <div class="card score-card">
+          <div class="score-ring" id="listenRing"><span id="listenScore">0</span><small>分</small></div>
+          <div class="score-meta">
+            <div class="score-line">正确 <b id="listenRight">0</b> · 错误 <b id="listenWrong">0</b></div>
+            <div class="score-line muted" id="listenTip">听不清可以点 0.6x 慢速哦</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 口语 ---------- -->
+      <section class="page" id="page-speak">
+        <div class="toolbar">
+          <div class="seg" id="speakMode">
+            <button class="seg-btn active" data-mode="shadow">句子跟读</button>
+            <button class="seg-btn" data-mode="word">发音矫正</button>
+            <button class="seg-btn" data-mode="roleplay">情景对话</button>
+          </div>
+          <div class="tool-right">
+            <select id="speakLevel" class="sel"></select>
+            <span class="mic-badge" id="micBadge">麦克风未启用</span>
+          </div>
+        </div>
+
+        <div class="card speak-stage">
+          <div class="speak-target">
+            <div class="target-ko" id="speakKo">안녕하세요. 만나서 반가워요.</div>
+            <div class="target-rom" id="speakRom">annyeonghaseyo. mannaseo bangawoyo.</div>
+            <div class="target-zh" id="speakZh">你好，很高兴认识你。</div>
+          </div>
+
+          <div class="speak-controls">
+            <button class="btn small" id="btnSpeakPlay">🔊 听示范</button>
+            <button class="btn small" id="btnSpeakSlow">🐢 慢速</button>
+            <button class="mic-btn" id="btnSpeakMic">
+              <svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4zm7-4a7 7 0 0 1-6 6.92V21h3v2H8v-2h3v-3.08A7 7 0 0 1 5 11h2a5 5 0 0 0 10 0z"/></svg>
+              <span id="micLabel">按住/点击开始朗读</span>
+            </button>
+            <button class="btn small ghost" id="btnSpeakNext">换一句 →</button>
+          </div>
+
+          <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+          <div class="recogn" id="speakRecogn">
+            <div class="recogn-label">识别结果</div>
+            <div class="recogn-text ko" id="speakRecognText">—</div>
+          </div>
+
+          <div class="speak-result" id="speakResult"></div>
+        </div>
+
+        <div class="card" id="speakHistoryCard">
+          <h3 class="card-title">发音热力 · 常见问题</h3>
+          <div class="pair-grid" id="speakPairs"></div>
+        </div>
+      </section>
+
+      <!-- ---------- 阅读 ---------- -->
+      <section class="page" id="page-read">
+        <div class="toolbar">
+          <div class="seg" id="readMode">
+            <button class="seg-btn active" data-mode="hangul">字母表</button>
+            <button class="seg-btn" data-mode="text">分级课文</button>
+            <button class="seg-btn" data-mode="vocab">生词本</button>
+          </div>
+          <div class="tool-right">
+            <label class="switch"><input type="checkbox" id="tglRom"><span></span>显示罗马音</label>
+            <label class="switch"><input type="checkbox" id="tglZh" checked><span></span>显示中文</label>
+          </div>
+        </div>
+
+        <div class="card" id="readHangul">
+          <h3 class="card-title">韩文字母表 · 한글</h3>
+          <div class="alpha-tabs" id="alphaTabs">
+            <button class="seg-btn active" data-t="vowel">元音 (21)</button>
+            <button class="seg-btn" data-t="consonant">辅音 (19)</button>
+            <button class="seg-btn" data-t="final">韵尾的代表音</button>
+          </div>
+          <div class="alpha-grid" id="alphaGrid"></div>
+        </div>
+
+        <div class="card" id="readText" style="display:none">
+          <h3 class="card-title">分级课文 · 읽기 연습</h3>
+          <div class="toolbar inner">
+            <select id="readLesson" class="sel"></select>
+            <button class="btn small primary" id="btnReadAll">🔊 全文朗读</button>
+          </div>
+          <div class="reader" id="readerBody"></div>
+        </div>
+
+        <div class="card" id="readVocab" style="display:none">
+          <h3 class="card-title">我的生词本 · 단어장 <span class="count-pill" id="vocabCount">0</span></h3>
+          <div class="vocab-list" id="vocabList"></div>
+        </div>
+      </section>
+
+      <!-- ---------- 写作 ---------- -->
+      <section class="page" id="page-write">
+        <div class="toolbar">
+          <div class="seg" id="writeMode">
+            <button class="seg-btn active" data-mode="typing">罗马音打字</button>
+            <button class="seg-btn" data-mode="spell">拼写测验</button>
+            <button class="seg-btn" data-mode="particle">助词填空</button>
+            <button class="seg-btn" data-mode="compose">句子重组</button>
+          </div>
+          <div class="tool-right">
+            <select id="writeLevel" class="sel"></select>
+            <button class="btn small" id="btnWriteReset">重新开始</button>
+          </div>
+        </div>
+
+        <div class="card write-card">
+          <div class="write-head">
+            <span class="quiz-idx" id="writeIdx">1 / 10</span>
+            <span class="quiz-tag" id="writeTag">打字</span>
+          </div>
+
+          <div class="write-prompt" id="writePrompt">annyeonghaseyo</div>
+          <div class="write-sub" id="writeSub">根据罗马音拼写韩文</div>
+
+          <div class="gogi-preview" id="writePreview"></div>
+          <input class="answer-input ko" id="writeInput" placeholder="输入韩文…" autocomplete="off">
+          <div class="feedback" id="writeFeedback"></div>
+
+          <div class="quiz-foot">
+            <button class="btn ghost small" id="btnWriteGiveUp">看答案</button>
+            <button class="btn primary" id="btnWriteCheck">检查</button>
+            <button class="btn primary" id="btnWriteNext" style="display:none">下一题 →</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">韩文输入法小贴士</h3>
+          <ul class="tips">
+            <li>Windows：按 <b>Win + 空格</b> 或 <b>Shift + 空格</b> 切换到「韩国语」输入法。</li>
+            <li>键盘对照：<b>ㄱ=R, ㄴ=S, ㄷ=E, ㄹ=F, ㅁ=A, ㅂ=Q, ㅅ=T, ㅇ=D, ㅈ=W, ㅊ=C, ㅋ=Z, ㅌ=X, ㅍ=V, ㅎ=G</b></li>
+            <li>紧音输入：<b>Shift + ㄱㄷㅂㅅㅈ</b> → ㄲ ㄸ ㅃ ㅆ ㅉ。</li>
+            <li>也可以在下方直接打字，页面底部提供「虚拟韩文键盘」，无需安装输入法也能练习。</li>
+          </ul>
+          <div class="kbd-wrap">
+            <div class="kbd" id="virtualKbd"></div>
+            <textarea class="kbd-out ko" id="kbdOut" placeholder="点击上方按键即可拼写韩文（支持自动组合）"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 音乐 ---------- -->
+      <section class="page" id="page-music">
+        <div class="card import-card">
+          <h3 class="card-title">导入 QQ 音乐歌曲</h3>
+          <p class="card-desc">粘贴 QQ 音乐的<b>分享链接 / 分享文案 / 歌名</b>，或者直接粘贴<b>歌词（支持 LRC 时间轴）</b>，系统会生成逐句学习计划。</p>
+
+          <details class="guide" id="musicGuide">
+            <summary>📋 不知道歌词怎么拿？点开看三步操作</summary>
+            <ol class="guide-steps">
+              <li><b>打开 QQ 音乐</b>，播放你想学的韩语歌，进入歌词页。</li>
+              <li><b>复制歌词</b>：点击歌词区右上角「⋯ / 分享」→「复制歌词」；或长按歌词逐句选中复制。</li>
+              <li><b>粘贴到下方输入框</b>，点「解析并导入」。带 <code>[00:12.50]</code> 时间轴的 LRC、纯歌词、带中文翻译的双语文本都能识别。</li>
+            </ol>
+            <div class="guide-note">
+              小提示：如果只粘贴分享文案（含《歌名》），会自动匹配内置曲库；匹配不到时再粘歌词即可。<br>
+              本工具不联网抓取，歌词由你自己复制 —— 更稳，也不碰版权。
+            </div>
+          </details>
+
+          <textarea class="import-input" id="musicInput" placeholder="例：我把这首歌分享给你《Dynamite》https://i.y.qq.com/v8/playshare.html?... 
+也可以直接粘贴歌词，每行一句，LRC 格式如：[00:12.50]노래 가사"></textarea>
+          <div class="import-actions">
+            <button class="btn primary" id="btnMusicImport">解析并导入</button>
+            <button class="btn ghost" id="btnMusicDemo">载入示范曲目</button>
+            <span class="import-status" id="musicStatus"></span>
+          </div>
+        </div>
+
+        <div class="card" id="musicResult" style="display:none">
+          <div class="song-head">
+            <div class="song-cover" id="songCover">♫</div>
+            <div class="song-meta">
+              <div class="song-title ko" id="songTitle">—</div>
+              <div class="song-artist" id="songArtist">—</div>
+              <div class="song-tags" id="songTags"></div>
+            </div>
+            <div class="song-tools">
+              <button class="btn small" id="btnSongPlayAll">🔊 朗读全曲</button>
+              <button class="btn small ghost" id="btnSongStop">■ 停止</button>
+            </div>
+          </div>
+
+          <div class="toolbar inner">
+            <div class="seg" id="lyricMode">
+              <button class="seg-btn active" data-mode="study">逐句精学</button>
+              <button class="seg-btn" data-mode="fill">歌词填空</button>
+              <button class="seg-btn" data-mode="list">完整歌词</button>
+            </div>
+            <div class="tool-right"><span class="muted" id="lyricCount"></span></div>
+          </div>
+
+          <div class="lyric-study" id="lyricStudy"></div>
+          <div class="lyric-fill" id="lyricFill" style="display:none"></div>
+          <div class="lyric-list" id="lyricList" style="display:none"></div>
+        </div>
+      </section>
+
+      <!-- ---------- 爱豆聊天 ---------- -->
+      <section class="page" id="page-chat">
+        <div class="chat-wrap">
+          <div class="card idol-picker">
+            <h3 class="card-title">选择你的练习伙伴</h3>
+            <div class="idol-list" id="idolList"></div>
+            <h3 class="card-title" style="margin-top:18px">对话难度</h3>
+            <div class="seg vertical" id="chatLevel">
+              <button class="seg-btn active" data-lv="easy">轻松模式 · 반말/존댓말 教学</button>
+              <button class="seg-btn" data-lv="normal">日常闲聊 · 韩语 + 中文对照</button>
+              <button class="seg-btn" data-lv="challenge">挑战模式 · 只说韩语</button>
+            </div>
+            <h3 class="card-title" style="margin-top:18px">场景剧本</h3>
+            <select class="sel full" id="chatScene"></select>
+            <div class="switch-row">
+              <label class="switch"><input type="checkbox" id="tglAutoSpeak" checked><span></span>自动朗读回复</label>
+              <label class="switch"><input type="checkbox" id="tglAutoFix" checked><span></span>实时纠错</label>
+            </div>
+          </div>
+
+          <div class="card chat-main">
+            <div class="chat-head" id="chatHead">
+              <div class="chat-av" id="chatAv">서</div>
+              <div>
+                <div class="chat-name" id="chatName">서연</div>
+                <div class="chat-state" id="chatState">在线 · 正在等你说话</div>
+              </div>
+              <button class="btn small ghost" id="btnChatClear">清空对话</button>
+            </div>
+
+            <div class="chat-body" id="chatBody"></div>
+
+            <div class="typing" id="chatTyping" style="display:none"><i></i><i></i><i></i> 서연 입력 중…</div>
+
+            <div class="chat-input">
+              <input id="chatText" class="chat-field ko" placeholder="用韩语和 서연 聊聊天吧…（也可以说中文，她会教你韩语）" autocomplete="off">
+              <button class="btn small" id="btnChatMic" title="语音输入">🎤</button>
+              <button class="btn small ghost" id="btnChatSuggest" title="提示回复">💡</button>
+              <button class="btn primary" id="btnChatSend">发送</button>
+            </div>
+            <div class="chat-tip" id="chatTip">试着输入：<b>안녕</b> / <b>뭐 해?</b> / <b>오늘 날씨 어때?</b> / <b>한국어 공부하고 싶어</b></div>
+          </div>
+
+          <div class="card corrector">
+            <h3 class="card-title">实时纠错 <span class="count-pill" id="fixCount">0</span></h3>
+            <div class="card-desc">你说出的每一句韩语都会被检查：拼写、助词、敬语、隔写。</div>
+            <div class="fix-list" id="fixList"><div class="empty">还没有记录，说句话试试吧。</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 设置 ---------- -->
+      <section class="page" id="page-settings">
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">发音音色 · 목소리</h3>
+            <p class="card-desc">选择系统可用的语音引擎，并调节音高、语速与音量，打造你喜欢的声音。</p>
+            <div class="field">
+              <label>语音引擎（优先韩语）</label>
+              <select class="sel full" id="selVoice"></select>
+            </div>
+            <div class="field">
+              <label>爱豆音色预设</label>
+              <div class="preset-grid" id="presetGrid"></div>
+            </div>
+            <div class="slider-field">
+              <label>音高 <b id="valPitch">1.00</b></label>
+              <input type="range" id="rngPitch" min="0.5" max="2" step="0.05" value="1">
+            </div>
+            <div class="slider-field">
+              <label>语速 <b id="valRate">0.95</b></label>
+              <input type="range" id="rngRate" min="0.4" max="1.6" step="0.05" value="0.95">
+            </div>
+            <div class="slider-field">
+              <label>音量 <b id="valVol">1.00</b></label>
+              <input type="range" id="rngVol" min="0" max="1" step="0.05" value="1">
+            </div>
+            <div class="field">
+              <label>试听文本</label>
+              <input class="answer-input ko" id="trialText" value="안녕하세요, 오늘도 한국어 공부해요!">
+            </div>
+            <button class="btn primary" id="btnTrial">🔊 试听</button>
+            <div class="env-warn" id="envWarn"></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">学习偏好</h3>
+            <div class="field">
+              <label>默认课程难度</label>
+              <select class="sel full" id="selDefLevel">
+                <option value="beginner">初级 입문</option>
+                <option value="intermediate">中级 중급</option>
+                <option value="advanced">高级 고급</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>每次训练题量</label>
+              <select class="sel full" id="selQuizSize">
+                <option value="5">5 题</option>
+                <option value="10" selected>10 题</option>
+                <option value="15">15 题</option>
+                <option value="20">20 题</option>
+              </select>
+            </div>
+            <div class="switch-row col">
+              <label class="switch"><input type="checkbox" id="tglAutoNext" checked><span></span>答对后自动进入下一题</label>
+              <label class="switch"><input type="checkbox" id="tglAlwaysRom" checked><span></span>课文默认显示罗马音</label>
+              <label class="switch"><input type="checkbox" id="tglClickRead"><span></span>点击任意韩语文本自动朗读</label>
+            </div>
+
+            <h3 class="card-title" style="margin-top:20px">数据管理</h3>
+            <div class="row-btns">
+              <button class="btn small" id="btnExport">导出学习数据</button>
+              <button class="btn small ghost" id="btnImport">导入</button>
+              <button class="btn small danger" id="btnReset">清空全部数据</button>
+            </div>
+            <textarea id="dataBox" class="data-box" style="display:none" placeholder="学习数据 JSON 会出现在这里"></textarea>
+
+            <h3 class="card-title" style="margin-top:20px">环境自检</h3>
+            <div class="diag" id="diagBox"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="js/data.js"></script>
+<script src="js/core.js"></script>
+<script src="js/speech.js"></script>
+<script src="js/corrector.js"></script>
+<script src="js/learn.js"></script>
+<script src="js/music.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
