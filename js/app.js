@@ -300,6 +300,14 @@
     App.renderHome();
     App.syncVoiceChip();
 
+    /* 移动端语音解锁：首次触摸/点击时静音播一个音节，之后才能正常朗读 */
+    ['touchstart', 'mousedown', 'click'].forEach(function (ev) {
+      document.addEventListener(ev, function once() {
+        Speech.unlock();
+        document.removeEventListener(ev, once);
+      }, { once: true, passive: true });
+    });
+
     /* 全局热键：Ctrl+Enter 试读当前输入框 */
     document.addEventListener('keydown', function (e) {
       if (e.ctrlKey && e.key === 'Enter') {
