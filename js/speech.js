@@ -127,7 +127,9 @@
       if (!text) { resolve(false); return; }
 
       try {
-        Speech.synth.cancel();
+        // iOS 上若正在朗读时直接 cancel 再 speak，下一句常常被静默吞掉；
+        // 只在确实有播放/排队时才取消，避免误伤。
+        if (Speech.synth.speaking || Speech.synth.pending) Speech.synth.cancel();
       } catch (e) { /* ignore */ }
 
       var utter = new SpeechSynthesisUtterance(text);
