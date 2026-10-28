@@ -212,6 +212,21 @@
         if (!ok) $st.innerHTML = '❌ 测试失败：①密钥是否正确 ②控制台是否已「开启韩语发音人」③网络能否访问 xfyun.cn。';
       });
     };
+
+    var $diag = $('#btnCloudDiag');
+    if ($diag) $diag.onclick = function () {
+      save();
+      $st.classList.add('show');
+      $st.innerHTML = '正在诊断到 tts-api.xfyun.cn 的 WebSocket 握手…';
+      KC.cloudtts.diagnose(function (r) {
+        if (r.ok) {
+          $st.innerHTML = '✅ 连接诊断通过（' + (r.code || '握手成功') + '）。可点「测试云端发音」试听。';
+        } else {
+          $st.innerHTML = '❌ 连接诊断失败：' + (r.err || '') +
+            '。可能原因：①手机「手机管家/安全隐私」拦截了 WebSocket；②当前 WiFi 路由器/运营商屏蔽了 wss；③建议关 WiFi 用 4G/5G 流量再试一次，或在手机浏览器直接打开 https://tts-api.xfyun.cn/ 看能否连通。';
+        }
+      });
+    };
   };
 
   /* ---------- 全局初始化 ---------- */
