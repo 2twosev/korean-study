@@ -76,12 +76,50 @@
     document.dispatchEvent(new CustomEvent('kc:voicechange'));
   };
 
+  /* ---------- 移动端解锁 ----------
+     iOS Safari / 部分安卓浏览器要求：第一次 speak 必须发生在「用户手势」里，
+     否则之后所有（包括异步的）朗读都会被静默丢弃。这里在首次触摸/点击时
+     播一个静音音节完成解锁。 */
+  Speech._unlocked = false;
+  Speech.unlock = function () {
+    if (Speech._unlocked || !Speech.synth) return;
+    try {
+      var u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      u.rate = 2;
+      Speech.synth.speak(u);
+      Speech._unlocked = true;
+    } catch (e) { /* ignore */ }
+    Speech.loadVoices();
+  };
+
+  /* 等待语音列表就绪（移动端加载较慢） */
+  Speech.ensureVoices = function () {
+    return new Promise(function (resolve) {
+      if (Speech.voices && Speech.voices.length) return resolve(Speech.voices);
+      var tries = 0;
+      var timer = setInterval(function () {
+        Speech.loadVoices();
+        if ((Speech.voices && Speech.voices.length) || ++tries >= 10) {
+          clearInterval(timer);
+          resolve(Speech.voices || []);
+        }
+      }, 150);
+    });
+  };
+
   /* ---------- 朗读 ---------- */
   /**
    * @param {string} text
    * @param {object} opts {pitch,rate,vol,voiceURI,onstart,onend,slow}
    */
   Speech.speak = function (text, opts) {
+    return Speech.ensureVoices().then(function () {
+      return doSpeak(text, opts);
+    });
+  };
+
+  function doSpeak(text, opts) {
     return new Promise(function (resolve) {
       opts = opts || {};
       if (!Speech.synth) { resolve(false); return; }
@@ -119,7 +157,7 @@
       var ms = Math.min(30000, Math.max(4000, text.length * 420));
       setTimeout(function () { fin(true); }, ms);
     });
-  };
+  }
 
   /* 朗读任意元素中的韩语文本 */
   Speech.speakEl = function (el) {
@@ -235,11 +273,14 @@
       text: '语音合成 (Web Speech API)：' + (Speech.synth ? '支持' : '不支持，请换用 Edge / Chrome')
     });
     var ko = Speech.koVoices();
+    var isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent || '');
     out.push({
       ok: ko.length > 0,
       level: ko.length ? 'ok' : 'warn',
       text: '韩语发音包：' + (ko.length ? ('已找到 ' + ko.length + ' 个韩语语音') :
-        '未检测到韩语语音（Windows 可在「设置 → 时间和语言 → 语音」安装 Korean 语音包）')
+        '未检测到韩语语音 —— ' + (isMobile
+          ? '手机需安装韩语语音：iOS「设置 → 辅助功能 → 朗读内容 → 声音 → 한국어 下载」；安卓「设置 → 系统 → 语言和输入法 → 文字转语音 → 安装韩语」'
+          : 'Windows 可在「设置 → 时间和语言 → 语音」安装 Korean 语音包'))
     });
     out.push({
       ok: Speech.supportSTT,
@@ -266,6 +307,20 @@
         ? 'file:// 直接打开（麦克风不可用，建议用 node serve.js 启动）'
         : location.protocol.replace(':', '') + ' 方式运行')
     });
+    if (isMobile) {
+      out.push({
+        ok: Speech._unlocked,
+        level: Speech._unlocked ? 'ok' : 'warn',
+        text: '手机语音解锁：' + (Speech._unlocked
+          ? '已完成（可以朗读）'
+          : '尚未解锁 —— 请点击页面任意按钮一次，手机浏览器要求首次发声必须由用户点击触发')
+      });
+      out.push({
+        ok: true,
+        level: 'warn',
+        text: 'iPhone 注意：机身左侧的「静音键」会静音所有网页语音，听不到声音时请先关闭静音'
+      });
+    }
     return out;
   };
 
