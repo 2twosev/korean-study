@@ -8,7 +8,7 @@
   'use strict';
 
   var CloudTTS = KC.cloudtts = {
-    cfg: { appId: '', apiKey: '', apiSecret: '', vcn: 'x2_KoKr_Miya' },
+    cfg: { appId: '', apiKey: '', apiSecret: '', vcn: 'miya' },
     enabled: false,
     _audio: null,
 
@@ -17,7 +17,7 @@
       this.cfg.appId = c.appId || '';
       this.cfg.apiKey = c.apiKey || '';
       this.cfg.apiSecret = c.apiSecret || '';
-      this.cfg.vcn = c.vcn || 'x2_KoKr_Miya';
+      this.cfg.vcn = c.vcn || 'miya';
       this.enabled = !!c.enabled;
     },
 
