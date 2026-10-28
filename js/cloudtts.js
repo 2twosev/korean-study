@@ -73,13 +73,26 @@
           '&host=tts-api.xfyun.cn';
 
         return new Promise(function (resolve) {
-          var ws, audioChunks = [], finished = false, done = false;
-          function fin(ok) { if (!done) { done = true; resolve(ok); } }
+          var ws, audioChunks = [], finished = false, done = false, opened = false;
+          var openTimer = null;
+          function fin(ok, detail) {
+            if (done) return;
+            done = true;
+            if (openTimer) { clearTimeout(openTimer); openTimer = null; }
+            if (!ok && detail) KC.toast(detail, 'err');
+            resolve(ok);
+          }
 
           try { ws = new WebSocket(url); }
-          catch (e) { KC.toast('无法连接云端发音服务', 'err'); fin(false); return; }
+          catch (e) { fin(false, '无法创建连接（浏览器不支持 WebSocket）'); return; }
+
+          /* 6 秒未建立连接 → 判定为网络/拦截类失败，给出明确提示 */
+          openTimer = setTimeout(function () {
+            if (!opened) { try { ws.close(); } catch (e) {} fin(false, '云端连接超时：多半是手机网络/手机管家拦截了 WebSocket（详见设置页提示）'); }
+          }, 6000);
 
           ws.onopen = function () {
+            opened = true;
             if (opts.onstart) opts.onstart();
             var rate = (opts.rate != null ? opts.rate : 1.0) * (opts.slow ? 0.62 : 1);
             var speed = Math.max(0, Math.min(100, Math.round(rate * 50)));
@@ -95,24 +108,27 @@
               data: { status: 2, text: self._utf8ToB64(text) }
             };
             try { ws.send(JSON.stringify(frame)); }
-            catch (e) { ws.close(); fin(false); }
+            catch (e) { ws.close(); fin(false, '云端连接已断开'); }
           };
 
           ws.onmessage = function (ev) {
             try {
               var msg = JSON.parse(ev.data);
               if (msg.code && msg.code !== 0) {
-                KC.toast('云端发音错误 ' + msg.code + '：' + (msg.message || ''), 'err');
-                ws.close(); fin(false); return;
+                fin(false, '云端发音错误 ' + msg.code + '：' + (msg.message || ''));
+                return;
               }
               if (msg.data && msg.data.audio) audioChunks.push(msg.data.audio);
               if (msg.data && msg.data.status === 2) { finished = true; ws.close(); }
             } catch (e) { /* 忽略空帧 / 非 JSON 帧 */ }
           };
 
-          ws.onerror = function () { KC.toast('云端发音连接失败，请检查网络', 'err'); fin(false); };
+          ws.onerror = function () {
+            fin(false, opened ? '云端传输中断，请重试' : '云端连接失败：请检查网络，或关闭手机管家/安全软件的联网拦截');
+          };
 
-          ws.onclose = function () {
+          ws.onclose = function (ev) {
+            var code = ev && ev.code;
             if (finished && audioChunks.length) {
               var bin = atob(audioChunks.join(''));
               var bytes = new Uint8Array(bin.length);
@@ -126,7 +142,13 @@
               var p = a.play();
               if (p && p.catch) p.catch(function () { if (opts.onend) opts.onend(); fin(true); });
             } else if (!done) {
-              fin(false);
+              if (code === 1006) {
+                fin(false, '云端连接被异常关闭（关闭码 1006）：多半是手机网络被拦截或丢包，建议换 WiFi 或关闭手机管家后重试');
+              } else if (!opened) {
+                fin(false, '云端连接失败（关闭码 ' + code + '）：请检查网络，或关闭手机管家/安全软件的联网拦截');
+              } else {
+                fin(false, '云端连接已关闭（关闭码 ' + code + '）');
+              }
             }
           };
         });
