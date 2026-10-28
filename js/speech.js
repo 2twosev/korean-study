@@ -114,6 +114,15 @@
    * @param {object} opts {pitch,rate,vol,voiceURI,onstart,onend,slow}
    */
   Speech.speak = function (text, opts) {
+    opts = opts || {};
+    // 优先使用云端发音（讯飞）：国产手机无系统韩语 TTS 时的根本解法
+    if (KC.cloudtts && KC.cloudtts.enabled && KC.cloudtts.isConfigured()) {
+      var merged = Object.assign(
+        { pitch: Speech.settings.pitch, rate: Speech.settings.rate, vol: Speech.settings.vol },
+        opts
+      );
+      return KC.cloudtts.speak(text, merged);
+    }
     return Speech.ensureVoices().then(function () {
       return doSpeak(text, opts);
     });
@@ -297,7 +306,24 @@
         ok: false,
         level: 'warn',
         text: (isOppo ? 'OPPO 专享：' : '安卓专享：') +
-          '网页朗读调用的是手机「系统 TTS 引擎」，不是浏览器自带语音。OPPO 默认引擎（讯飞/自带）没有韩语，需先到应用商店装「Google 文字转语音引擎」并下载 한국어，否则 Edge 也读不了韩语。'
+          '网页朗读调用的是手机「系统 TTS 引擎」，不是浏览器自带语音。OPPO 默认引擎（讯飞/自带）没有韩语；且国内连不上 Google 服务器，无法下载 한국어 语音数据。' +
+          '推荐在本页「☁️ 云端发音」填入讯飞密钥，用云端合成韩语（国内直连、无需翻墙）。'
+      });
+    }
+    /* 云端发音（讯飞）状态 */
+    if (KC.cloudtts && KC.cloudtts.isConfigured()) {
+      out.push({
+        ok: KC.cloudtts.enabled,
+        level: KC.cloudtts.enabled ? 'ok' : 'warn',
+        text: '云端发音（讯飞）：已配置' + (KC.cloudtts.enabled
+          ? '，已启用（覆盖系统 TTS，无需手机装韩语包）'
+          : '，但未启用 —— 到「☁️ 云端发音」卡片勾选启用')
+      });
+    } else {
+      out.push({
+        ok: false,
+        level: 'warn',
+        text: '云端发音（讯飞）：未配置 —— 国产手机无系统韩语时，可在此填入讯飞密钥用云端合成韩语'
       });
     }
     out.push({
