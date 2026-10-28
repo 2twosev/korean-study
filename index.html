@@ -470,6 +470,33 @@
 
       <!-- ---------- 设置 ---------- -->
       <section class="page" id="page-settings">
+
+        <!-- 云端发音（讯飞）：解决国产手机无系统韩语 TTS 的问题 -->
+        <div class="card cloud-card">
+          <h3 class="card-title">☁️ 云端发音 · 讯飞（国内可用，无需手机装韩语包）</h3>
+          <p class="card-desc">
+            OPPO / 华为等国产手机<b>系统自带 TTS 没有韩语</b>，且国内连不上 Google 服务器、无法下载韩语语音。
+            开启后由<b>讯飞云端</b>合成韩语，国内直连、无需翻墙，覆盖系统 TTS。
+            需先在 <a href="https://console.xfyun.cn/services/tts" target="_blank" rel="noopener">讯飞开放平台</a>
+            免费创建应用，并在「发音人管理」里<b>开启韩语发音人（否则报 11200）</b>。
+          </p>
+          <div class="switch-row" style="margin-bottom:12px">
+            <label class="switch"><input type="checkbox" id="tglCloud"><span></span>启用云端发音（覆盖系统 TTS）</label>
+          </div>
+          <div class="field"><label>APPID</label><input class="answer-input" id="cloudAppId" placeholder="讯飞控制台获取"></div>
+          <div class="field"><label>APIKey</label><input class="answer-input" id="cloudApiKey" placeholder="讯飞控制台获取"></div>
+          <div class="field"><label>APISecret</label><input class="answer-input" id="cloudApiSecret" placeholder="讯飞控制台获取"></div>
+          <div class="field">
+            <label>发音人（韩语）</label>
+            <select class="sel full" id="cloudVcn">
+              <option value="x2_KoKr_Miya">Miya · 女声</option>
+              <option value="x2_KoKr_Kyung">Kyung · 男声</option>
+            </select>
+          </div>
+          <button class="btn small primary" id="btnCloudTest">🔊 测试云端发音</button>
+          <div class="env-warn" id="cloudStatus"></div>
+        </div>
+
         <div class="grid-2">
           <div class="card">
             <h3 class="card-title">发音音色 · 목소리</h3>
@@ -550,6 +577,7 @@
 <script src="js/data.js"></script>
 <script src="js/core.js"></script>
 <script src="js/speech.js"></script>
+<script src="js/cloudtts.js"></script>
 <script src="js/corrector.js"></script>
 <script src="js/learn.js"></script>
 <script src="js/music.js"></script>
