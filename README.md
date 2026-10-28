@@ -37,6 +37,8 @@ https://xxxx.trycloudflare.com
 https://你的用户名.github.io/korean-study/
 ```
 
+> 本项目已发布：**https://2twosev.github.io/korean-study/** （GitHub Pages，永久地址）
+
 **三步搞定：**
 
 1. **注册 GitHub**：打开 https://github.com/signup 用邮箱注册（免费）。
