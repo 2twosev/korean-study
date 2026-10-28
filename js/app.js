@@ -174,6 +174,47 @@
     }).join('');
   };
 
+  /* ---------- 云端发音（讯飞）设置 ---------- */
+  App.initCloud = function () {
+    var c = S.settings.cloud;
+    KC.cloudtts.configure(c);
+    var $app = $('#cloudAppId'), $key = $('#cloudApiKey'), $sec = $('#cloudApiSecret'),
+        $vcn = $('#cloudVcn'), $tgl = $('#tglCloud'), $st = $('#cloudStatus');
+    if (!$app) return;
+    $app.value = c.appId || '';
+    $key.value = c.apiKey || '';
+    $sec.value = c.apiSecret || '';
+    $vcn.value = c.vcn || 'x2_KoKr_Miya';
+    $tgl.checked = !!c.enabled;
+
+    function save() {
+      c.appId = $app.value.trim(); c.apiKey = $key.value.trim(); c.apiSecret = $sec.value.trim();
+      c.vcn = $vcn.value; c.enabled = $tgl.checked;
+      KC.cloudtts.configure(c);
+      S.save();
+    }
+    [$app, $key, $sec].forEach(function (el) { el.oninput = save; });
+    $vcn.onchange = save;
+    $tgl.onchange = function () { save(); App.renderDiag(); };
+
+    $('#btnCloudTest').onclick = function () {
+      save();
+      $st.classList.add('show');
+      if (!KC.cloudtts.isConfigured()) {
+        $st.innerHTML = '请先填写完整的 APPID / APIKey / APISecret（讯飞控制台获取）。';
+        KC.toast('请先填写讯飞密钥', 'err');
+        return;
+      }
+      $st.innerHTML = '正在测试云端发音（合成「안녕하세요」）…';
+      KC.cloudtts.speak('안녕하세요, 반갑습니다.', {
+        onstart: function () { $st.innerHTML = '▶ 正在播放，能听到韩语即成功！'; },
+        onend: function () { $st.innerHTML = '✅ 云端发音正常，已覆盖系统 TTS。'; }
+      }).then(function (ok) {
+        if (!ok) $st.innerHTML = '❌ 测试失败：①密钥是否正确 ②控制台是否已「开启韩语发音人」③网络能否访问 xfyun.cn。';
+      });
+    };
+  };
+
   /* ---------- 全局初始化 ---------- */
   App.init = function () {
     Speech.init();
@@ -186,6 +227,7 @@
     KC.learn.init();
     KC.music.init();
     KC.chat.init();
+    App.initCloud();
 
     /* 导航 */
     $$('.nav-item').forEach(function (a) {
