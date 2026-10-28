@@ -568,6 +568,7 @@ button{font-family:inherit;cursor:pointer}
 .bubble .ko-line{font-family:var(--font-ko);font-size:16px;font-weight:600}
 .bubble .rom-line{font-size:12px;opacity:.7}
 .bubble .zh-line{font-size:12.5px;opacity:.85;margin-top:3px}
+.bubble.collapsed .rom-line,.bubble.collapsed .zh-line{display:none}
 .msg.me .bubble .zh-line{color:rgba(255,255,255,.85)}
 .msg-time{font-size:10.5px;color:var(--txt3);padding:0 4px}
 .msg-actions{display:flex;gap:6px;margin-top:2px}
@@ -576,6 +577,8 @@ button{font-family:inherit;cursor:pointer}
   padding:2px 8px;font-size:11px;color:var(--txt3);transition:.14s;
 }
 .msg-act:hover{color:var(--purple);border-color:var(--purple)}
+.open-act{display:none}
+.msg-collapsed .open-act{display:inline-block}
 .sys-msg{align-self:center;font-size:11.5px;color:var(--txt3);background:var(--line2);padding:3px 12px;border-radius:20px}
 
 .typing{display:flex;align-items:center;gap:4px;padding:0 16px 10px;font-size:12px;color:var(--txt3)}
@@ -772,33 +775,61 @@ input[type=range]::-moz-range-thumb{
   .fill-input{width:96px}
   .import-input{min-height:96px;font-size:16px} /* 16px 防 iOS 自动放大 */
 
-  /* 聊天：手机上「聊天框优先」，选角与纠错面板移到下方 */
-  .chat-wrap{grid-template-columns:1fr;gap:12px}
-  .chat-main{order:1;padding:0}
-  .idol-picker{order:2;padding:14px}
-  .corrector{order:3;max-height:280px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .chat-body{height:46vh;min-height:240px;padding:12px}
-  .msg{max-width:90%}
-  .bubble{font-size:14px;padding:9px 12px;border-radius:14px}
-  .ko-line{font-size:16px}
-  .zh-line{font-size:12px}
-  .chat-head{padding:10px 12px;gap:10px}
-  .chat-av{width:36px;height:36px;flex:0 0 36px;font-size:14px}
-  .chat-name{font-size:14px}
-  .chat-state{font-size:11px}
-  .chat-head .btn{margin-left:auto;padding:5px 10px;font-size:11.5px}
-  .idol-list{flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:6px;scrollbar-width:none}
+  /* 聊天：手机上紧凑排布，聊天框优先，选角/纠错下移 */
+  html,body{overflow-x:hidden}
+  .chat-wrap{grid-template-columns:1fr;gap:10px}
+  .chat-main{order:1;padding:0;border-radius:14px}
+  .idol-picker{order:2;padding:12px}
+  .corrector{order:3;max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+  /* 头部收紧 */
+  .chat-head{padding:8px 10px;gap:8px}
+  .chat-av{width:30px;height:30px;flex:0 0 30px;font-size:12.5px}
+  .chat-name{font-size:13.5px}
+  .chat-state{display:none}
+  .chat-head .btn{margin-left:auto;padding:4px 9px;font-size:11px}
+
+  /* 对话区：按屏幕高度自适应（用 dvh 规避移动端地址栏跳动） */
+  .chat-body{
+    height:auto;min-height:160px;
+    max-height:calc(100dvh - 220px);
+    padding:10px;gap:7px;
+  }
+  .msg{max-width:92%;gap:2px}
+  .bubble{padding:7px 11px;font-size:13.5px;line-height:1.5;border-radius:13px}
+  .ko-line{font-size:15px;line-height:1.45}
+  .zh-line{font-size:11.5px;margin-top:2px;line-height:1.4}
+  /* 手机上 AI 气泡默认折叠（只显韩语一行），点「看翻译」展开罗马音+中文 */
+  .rom-line{font-size:11px;opacity:.7}
+  .msg-time{font-size:9.5px;padding:0 3px}
+  .msg-actions{gap:3px;margin-top:1px}
+  .msg-act{font-size:10px;padding:1px 6px}
+  .typing{padding:0 10px 6px;font-size:11px}
+
+  /* 输入区 */
+  .chat-input{flex-wrap:wrap;gap:5px;padding:8px 10px}
+  .chat-field{flex:1 1 100%;order:-1;font-size:15px;padding:9px 11px}
+  .chat-input .btn{flex:1;padding:6px 8px;font-size:12px}
+  .chat-input .btn.primary{flex:1.3}
+  .chat-tip{font-size:10.5px;padding:0 10px 10px;line-height:1.55}
+
+  /* 选角与纠错收紧 */
+  .idol-list{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}
   .idol-list::-webkit-scrollbar{display:none}
-  .idol-item{flex:0 0 auto;min-width:144px;padding:7px 9px}
-  .idol-av{width:32px;height:32px;flex:0 0 32px;font-size:13px}
-  .chat-input{flex-wrap:wrap;gap:6px;padding:10px 12px}
-  .chat-field{flex:1 1 100%;order:-1;font-size:15px;padding:10px 12px}
-  .chat-input .btn{flex:1}
-  .chat-input .btn.primary{flex:1.4}
-  .chat-tip{font-size:11px;padding:0 12px 12px;line-height:1.6}
-  .typing{padding:0 12px 8px}
-  .msg-actions{gap:4px}
-  .msg-act{font-size:10.5px;padding:2px 7px}
+  .idol-item{flex:0 0 auto;min-width:124px;padding:6px 8px;gap:7px}
+  .idol-av{width:28px;height:28px;flex:0 0 28px;font-size:12px}
+  .idol-name{font-size:13px}
+  .idol-desc{font-size:10px}
+  .idol-picker .card-title{font-size:13px}
+  .idol-picker .card-title+.seg{margin-top:6px}
+  .idol-picker .seg-btn{font-size:11.5px;padding:5px 10px}
+  .idol-picker .sel{font-size:12px;padding:6px 9px}
+  .idol-picker .switch-row{margin-top:8px;gap:8px}
+  .idol-picker .switch{font-size:11.5px}
+  .fix-item{padding:8px 10px}
+  .fix-dst{font-size:14px}
+  .fix-src{font-size:13px}
+  .fix-reason{font-size:11px;line-height:1.5}
 
   /* 设置 */
   .preset-grid{grid-template-columns:1fr}
