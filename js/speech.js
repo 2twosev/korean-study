@@ -269,21 +269,37 @@
   /* ---------- 环境自检 ---------- */
   Speech.diag = function () {
     var out = [];
+    var ua = navigator.userAgent || '';
+    var isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(ua);
+    var isAndroid = /Android/i.test(ua);
+    var isOppo = /OPPO|ColorOS|PKD|CPH/i.test(ua);  // OPPO / ColorOS / 机型代号 CPH/PKD
     out.push({
       ok: !!Speech.synth,
       level: Speech.synth ? 'ok' : 'err',
       text: '语音合成 (Web Speech API)：' + (Speech.synth ? '支持' : '不支持，请换用 Edge / Chrome')
     });
     var ko = Speech.koVoices();
-    var isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent || '');
     out.push({
       ok: ko.length > 0,
       level: ko.length ? 'ok' : 'warn',
       text: '韩语发音包：' + (ko.length ? ('已找到 ' + ko.length + ' 个韩语语音') :
-        '未检测到韩语语音 —— ' + (isMobile
-          ? '手机需安装韩语语音：iOS「设置 → 辅助功能 → 朗读内容 → 声音 → 한국어 下载」；安卓「设置 → 系统 → 语言和输入法 → 文字转语音 → 安装韩语」'
-          : 'Windows 可在「设置 → 时间和语言 → 语音」安装 Korean 语音包'))
+        '未检测到韩语语音 —— ' + (isOppo
+          ? 'OPPO/ColorOS：到「设置 → 其他设置 → 文字转语音(TTS)输出」，把「首选引擎」改为「Google 文字转语音引擎」，再点它右边的齿轮 → 安装语音数据 → 找到 한국어 下载；装完重开 Edge 刷新本页'
+          : isAndroid
+          ? '安卓：到「设置 → 系统 → 语言和输入法 → 文字转语音(TTS)输出」，把首选引擎设为 Google，并安装 Korean/한국어 语音数据'
+          : isMobile
+          ? 'iOS：设置 → 辅助功能 → 朗读内容 → 声音 → 한국어 下载'
+          : 'Windows：设置 → 时间和语言 → 语音 → 添加「한국어(Korean)」语音包'))
     });
+    /* OPPO / 安卓专享提醒：网页朗读依赖手机系统 TTS 引擎，而非浏览器自带 */
+    if ((isAndroid || isOppo) && !ko.length) {
+      out.push({
+        ok: false,
+        level: 'warn',
+        text: (isOppo ? 'OPPO 专享：' : '安卓专享：') +
+          '网页朗读调用的是手机「系统 TTS 引擎」，不是浏览器自带语音。OPPO 默认引擎（讯飞/自带）没有韩语，需先到应用商店装「Google 文字转语音引擎」并下载 한국어，否则 Edge 也读不了韩语。'
+      });
+    }
     out.push({
       ok: Speech.supportSTT,
       level: Speech.supportSTT ? 'ok' : 'warn',
