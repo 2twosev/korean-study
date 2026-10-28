@@ -143,7 +143,8 @@
     settings: {
       voiceURI: '', pitch: 1.0, rate: 0.95, vol: 1.0, presetId: 'clear',
       level: 'beginner', quizSize: 10, autoNext: true, alwaysRom: true, clickRead: false,
-      idol: 'seoyeon', chatLevel: 'easy', scene: 'free', autoSpeak: true, autoFix: true
+      idol: 'seoyeon', chatLevel: 'easy', scene: 'free', autoSpeak: true, autoFix: true,
+      cloud: { enabled: false, appId: '', apiKey: '', apiSecret: '', vcn: 'x2_KoKr_Miya' }
     },
     stats: {
       words: 0, minutes: 0, speak: 0,
